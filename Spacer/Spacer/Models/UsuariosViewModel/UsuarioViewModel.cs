@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
 
-namespace Spacer.Models.Usuarios
+namespace Spacer.Models.UsuariosViewModel
 {
     public class LoginViewModel
     {
