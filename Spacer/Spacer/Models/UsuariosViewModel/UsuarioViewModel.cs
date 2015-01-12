@@ -16,13 +16,7 @@ namespace Spacer.Models.UsuariosViewModel
         [DataType(DataType.Password)]
         [StringLength(15, ErrorMessage = "* Máximo de {1} e mínimo de {2} caracteres!", MinimumLength = 4)]
         public string Senha { get; set; }
-
-        /// <summary>
-        /// Indica qual é a resolução da tela de quem solicitou a requisição. Este campo é aberto
-        /// e pode ser informado qualquer valor
-        /// </summary>
-        public string ResolucaoTela { get; set; }
-
+        
         [Display(Name = "Manter-me conectado")]
         public bool RememberMe { get; set; }
     }

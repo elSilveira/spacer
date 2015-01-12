@@ -53,7 +53,7 @@ namespace Spacer.Controllers
                         return View(model);
                     }
 
-                    SignIn(user, model.ResolucaoTela, model.RememberMe);
+                    SignIn(user, model.RememberMe);
 
                     return RedirectToLocal(returnUrl);
                 }
@@ -87,7 +87,7 @@ namespace Spacer.Controllers
             return RedirectToAction("Index", "Home");
         }
 
-        private void SignIn(Usuario user, string resolucaoTela, bool rememberMe)
+        private void SignIn(Usuario user, bool rememberMe)
         {
             try
             {

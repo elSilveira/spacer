@@ -1,4 +1,4 @@
-﻿@model Spacer.Models.Usuarios.LoginViewModel
+﻿@model Spacer.Models.UsuariosViewModel.LoginViewModel
 
 @{
     ViewBag.Title = "Acesso ao Sistema";
@@ -17,9 +17,7 @@
                 <h4>Insira seus dados para acessar o sistema.</h4>
                 <hr />
                 @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-
-                @Html.HiddenFor(m => m.ResolucaoTela);
-
+                
                 <div class="form-group">
                     @Html.LabelFor(model => model.Login, new { @class = "control-label col-md-2" })
                     <div class="col-md-10">
