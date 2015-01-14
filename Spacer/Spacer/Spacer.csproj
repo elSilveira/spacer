@@ -197,6 +197,7 @@
     <Compile Include="Areas\HelpPage\XmlDocumentationProvider.cs" />
     <Compile Include="Controllers\AcessoController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\TipoEspacoController.cs" />
     <Compile Include="Controllers\UsuarioController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -208,7 +209,9 @@
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\ContextoDB.cs" />
+    <Compile Include="Models\FormaPagamento.cs" />
     <Compile Include="Models\Permissao.cs" />
+    <Compile Include="Models\TipoEspaco.cs" />
     <Compile Include="Models\Usuario.cs" />
     <Compile Include="Models\UsuariosViewModel\AlteracaoSenhaViewModel.cs" />
     <Compile Include="Models\UsuariosViewModel\UsuarioViewModel.cs" />
@@ -281,6 +284,7 @@
     <Content Include="Views\Acesso\MeuPerfil.cshtml" />
     <Content Include="Views\Usuario\Permissoes.cshtml" />
     <Content Include="Views\Usuario\AlterarSenha.cshtml" />
+    <Content Include="Views\TipoEspaco\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

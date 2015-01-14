@@ -9,7 +9,7 @@ namespace Spacer.Migrations
     {
         public Configuration()
         {
-            AutomaticMigrationsEnabled = false;
+            AutomaticMigrationsEnabled = true;
         }
 
         protected override void Seed(Spacer.Models.ContextoDB context)
