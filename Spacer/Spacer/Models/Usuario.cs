@@ -28,6 +28,14 @@ namespace Spacer.Models
         [DataType(DataType.Password)]
         public string Senha { get; set; }
 
+        [StringLength(50,
+            ErrorMessage = "* O campo {0} aceita no máximo {1} e no mínimo {2} caracteres!",
+            MinimumLength = 5)]
+        [DataType(DataType.Password)]
+        [Display(Name = "Confirmação de Senha")]
+        [Compare("Senha", ErrorMessage = "* A senha e a confirmação da senha não são iguais!")]
+        public string ConfirmacaoSenha { get; set; }
+
         public virtual ICollection<Permissao> Permissoes { get; set; }
     }
 }

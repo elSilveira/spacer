@@ -201,18 +201,16 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201501122242455_First.cs" />
-    <Compile Include="Migrations\201501122242455_First.Designer.cs">
-      <DependentUpon>201501122242455_First.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201501122307186_Second.cs" />
-    <Compile Include="Migrations\201501122307186_Second.Designer.cs">
-      <DependentUpon>201501122307186_Second.cs</DependentUpon>
+    <Compile Include="Methods\ClaimsMethods\ClaimsManager.cs" />
+    <Compile Include="Migrations\201501140202308_First.cs" />
+    <Compile Include="Migrations\201501140202308_First.Designer.cs">
+      <DependentUpon>201501140202308_First.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\ContextoDB.cs" />
     <Compile Include="Models\Permissao.cs" />
     <Compile Include="Models\Usuario.cs" />
+    <Compile Include="Models\UsuariosViewModel\AlteracaoSenhaViewModel.cs" />
     <Compile Include="Models\UsuariosViewModel\UsuarioViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Results\ChallengeResult.cs" />
@@ -278,12 +276,11 @@
     <Content Include="Views\Acesso\Index.cshtml" />
     <Content Include="Views\Home\SomenteAutenticado.cshtml" />
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
-    <Content Include="Views\Acesso\MinhaConta.cshtml" />
-    <Content Include="Views\Usuario\Create.cshtml" />
-    <Content Include="Views\Usuario\Delete.cshtml" />
-    <Content Include="Views\Usuario\Details.cshtml" />
-    <Content Include="Views\Usuario\Edit.cshtml" />
+    <Content Include="Views\Usuario\Cadastro.cshtml" />
     <Content Include="Views\Usuario\Index.cshtml" />
+    <Content Include="Views\Acesso\MeuPerfil.cshtml" />
+    <Content Include="Views\Usuario\Permissoes.cshtml" />
+    <Content Include="Views\Usuario\AlterarSenha.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -296,11 +293,8 @@
     <None Include="Project_Readme.html" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201501122242455_First.resx">
-      <DependentUpon>201501122242455_First.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201501122307186_Second.resx">
-      <DependentUpon>201501122307186_Second.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201501140202308_First.resx">
+      <DependentUpon>201501140202308_First.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

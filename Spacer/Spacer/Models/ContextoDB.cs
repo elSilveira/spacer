@@ -38,8 +38,13 @@ namespace Spacer.Models
                     m.MapRightKey("PermissaoId");
                 });
 
+            // ignora a propriedade ConfirmacaoSenha do modelo de usuário e faz
+            // com que este campo não seja gerado no banco de dados
+            modelBuilder.Entity<Usuario>().Ignore(i => i.ConfirmacaoSenha);
 
             base.OnModelCreating(modelBuilder);
         }
+
+        public System.Data.Entity.DbSet<Spacer.Models.UsuariosViewModel.AlteracaoSenhaViewModel> AlteracaoSenhaViewModels { get; set; }
     }
 }

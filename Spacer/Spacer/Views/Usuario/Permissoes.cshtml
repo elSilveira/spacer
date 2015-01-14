@@ -1,0 +1,106 @@
+﻿@model Spacer.Models.Usuario
+
+@{
+    ViewBag.Title = "Alteração de Permissões";
+    var permissoes = ViewBag.Permissoes as List<Spacer.Models.Permissao>;
+}
+
+<style>
+    ul {
+        list-style: none;
+    }
+</style>
+
+<h2>Alteração de Permissões</h2>
+
+<div>
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Nome)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Nome)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Login)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Login)
+        </dd>
+    </dl>
+</div>
+
+@if (User.IsInRole("Admin") || User.IsInRole("CadastroUsuarios"))
+{
+    <hr />
+    <h4>Permissões</h4>
+
+    <div>
+        @if (Model.Nome == User.Identity.Name)
+        {
+            <h3>ATENÇÃO! VOCÊ NÃO PODE ALTERAR SUAS PRÓPRIAS PERMISSÕES!</h3>
+            <h4>Essas alterações devem ser feitas pelo Administrador do Sistema.</h4>
+        }
+        <ul>
+            @if (Model.Nome == User.Identity.Name)
+            {
+                foreach (var p in permissoes)
+                {
+                    var isChecked =
+                        Model.Permissoes.FirstOrDefault(f => f.Id == p.Id) != null ? "checked" : "";
+                    <li>
+                        <input type="checkbox" value="" @isChecked disabled /> @p.Nome
+                    </li>
+                }
+            }
+            else
+            {
+                foreach (var p in permissoes)
+                {
+                    var isChecked =
+                        Model.Permissoes.FirstOrDefault(f => f.Id == p.Id) != null ? "checked" : "";
+                    <li>
+                        <label><input type="checkbox" value="" @isChecked class="permissao" data-usuario="@Model.Id" data-permissao="@p.Id" /> @p.Nome</label>
+                    </li>
+                }
+            }
+        </ul>
+    </div>
+}
+<div>
+    @Html.ActionLink("Voltar para a lista", "Index")
+</div>
+
+@if (Model.Login != User.Identity.Name)
+{
+    @section scripts
+{
+        <script>
+            $(function () {
+                $('.permissao').change(function () {
+                    var isChecked = $(this).is(':checked');
+                    var usuarioId = $(this).data('usuario');
+                    var permissaoId = $(this).data('permissao');
+
+                    $.ajax({
+                        url: '@Url.Action("AlterarPermissao")',
+                        type: 'POST',
+                        dataType: 'json',
+                        data: { usuarioId: usuarioId, permissaoId: permissaoId, incluir: isChecked },
+                        error: function (x, y, z) {
+                            alert(z.statusCode);
+                        },
+                        success: function (ret) {
+                            if (!ret.alterou) {
+                                alert(ret.msg);
+                            }
+                        }
+                    });
+                });
+            });
+        </script>
+    }
+}

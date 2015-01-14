@@ -1,118 +1,191 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Data;
 using System.Data.Entity;
 using System.Linq;
-using System.Net;
-using System.Web;
 using System.Web.Mvc;
+using Spacer.Methods.ClaimsMethods;
 using Spacer.Models;
+using Spacer.Models.UsuariosViewModel;
 
 namespace Spacer.Controllers
 {
+    [Authorize(Roles = "Admin, CadastroUsuarios")]
     public class UsuarioController : Controller
     {
         private ContextoDB db = new ContextoDB();
 
-        // GET: Usuario
         public ActionResult Index()
         {
             return View(db.Usuario.ToList());
         }
 
-        // GET: Usuario/Details/5
-        public ActionResult Details(int? id)
+        public ActionResult Cadastro(int? id)
         {
-            if (id == null)
+            var usuario = new Usuario();
+            if (id != null && id > 0)
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                usuario = db.Usuario.Find(id);
+
+                if (usuario == null)
+                {
+                    return HttpNotFound("Usuário não encontrado!");
+                }
             }
-            Usuario usuario = db.Usuario.Find(id);
-            if (usuario == null)
-            {
-                return HttpNotFound();
-            }
+
             return View(usuario);
         }
 
-        // GET: Usuario/Create
-        public ActionResult Create()
-        {
-            return View();
-        }
-
-        // POST: Usuario/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,Nome,Login,Senha")] Usuario usuario)
+        public ActionResult Cadastro([Bind(Include = "Id,Nome,Login,Senha,ConfirmacaoSenha")] Usuario usuario)
         {
-            if (ModelState.IsValid)
+            if (ModelState.IsValid || (usuario.Id > 0 && !string.IsNullOrWhiteSpace(usuario.Nome)))
             {
-                db.Usuario.Add(usuario);
+                if (usuario.Id > 0)
+                {
+                    // a única alteração que poderemos fazer no usuário é o nome dele
+                    // a alteração da senha será em uma tela separada, específica
+                    // este tbm é um exemplo de como alterar um registro usando SQL direto
+
+                    var sql = string.Format("UPDATE Usuario SET Nome = '{0}' WHERE Id = {1}", usuario.Nome, usuario.Id);
+
+                    db.Database.ExecuteSqlCommand(sql);
+                }
+                else
+                {
+                    db.Usuario.Add(usuario);
+                }
+
                 db.SaveChanges();
+
                 return RedirectToAction("Index");
             }
 
             return View(usuario);
         }
 
-        // GET: Usuario/Edit/5
-        public ActionResult Edit(int? id)
+        public ActionResult Permissoes(int? id)
         {
-            if (id == null)
+            Usuario user;
+
+            if (id != null)
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                user = db.Usuario.Find(id);
             }
-            Usuario usuario = db.Usuario.Find(id);
-            if (usuario == null)
+            else
             {
-                return HttpNotFound();
+                var claimsManager = new ClaimsManager();
+
+                user = claimsManager.GetClaimsIdentity(User.Identity);
             }
-            return View(usuario);
+
+            ViewBag.Permissoes = db.Permissao.Where(w => w.Id > 1).ToList();
+
+            return View(user);
         }
 
-        // POST: Usuario/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id,Nome,Login,Senha")] Usuario usuario)
+        public ActionResult AlterarPermissao(int usuarioid, int permissaoId, bool incluir)
+        {
+            try
+            {
+                var sql = "";
+
+                if (incluir)
+                {
+                    sql = string.Format("INSERT INTO PermissaoUsuario VALUES ({0}, {1})", usuarioid, permissaoId);
+                }
+                else
+                {
+                    sql = string.Format("DELETE FROM PermissaoUsuario WHERE UsuarioId = {0} AND PermissaoId = {1}",
+                        usuarioid, permissaoId);
+                }
+
+                db.Database.ExecuteSqlCommand(sql);
+
+                return Json(new { alterou = true });
+            }
+            catch (Exception ex)
+            {
+                var msg = string.IsNullOrWhiteSpace(ex.Message) ? ex.InnerException.Message : ex.Message;
+
+                return Json(new { alterou = false, msg = msg });
+            }
+        }
+
+        public ActionResult AlterarSenha(int id, bool meuPerfil = false)
+        {
+            var model = new AlteracaoSenhaViewModel
+            {
+                Id = id,
+                Login = db.Usuario.Find(id).Login
+            };
+
+            ViewBag.MeuPerfil = meuPerfil;
+
+            return View(model);
+        }
+
+        [HttpPost]
+        public ActionResult AlterarSenha(AlteracaoSenhaViewModel model, bool meuPerfil = false)
         {
             if (ModelState.IsValid)
             {
-                db.Entry(usuario).State = EntityState.Modified;
-                db.SaveChanges();
-                return RedirectToAction("Index");
+                var user =
+                    db.Usuario.FirstOrDefault(
+                        f => f.Id == model.Id && f.Login == model.Login && f.Senha == model.SenhaAtual);
+
+                if (user != null)
+                {
+                    // a única alteração que poderemos fazer no usuário é o nome dele
+                    // a alteração da senha será em uma tela separada, específica
+                    // este tbm é um exemplo de como alterar um registro usando SQL direto
+
+                    var sql = string.Format("UPDATE Usuario SET Senha = '{0}' WHERE Id = {1} AND Login = '{2}'",
+                        model.NovaSenha, model.Id, model.Login);
+
+                    db.Database.ExecuteSqlCommand(sql);
+
+
+                    db.SaveChanges();
+
+                    if (meuPerfil)
+                    {
+                        return RedirectToAction("MeuPerfil", "Acesso");
+                    }
+                    else
+                    {
+                        return RedirectToAction("Index");
+                    }
+                }
+                else
+                {
+                    ModelState.AddModelError("SenhaAtual", "* Senha inválida! Digite a senha correta e tente novamente!");
+                }
             }
-            return View(usuario);
+
+            ViewBag.MeuPerfil = meuPerfil;
+
+            return View(model);
         }
 
-        // GET: Usuario/Delete/5
-        public ActionResult Delete(int? id)
+        public ActionResult Excluir(int? id)
         {
             if (id == null)
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                return Json(new { excluiu = false, msg = "Usuário não encontrado" });
             }
-            Usuario usuario = db.Usuario.Find(id);
+
+            var usuario = db.Usuario.Find(id);
+
             if (usuario == null)
             {
-                return HttpNotFound();
+                return Json(new { excluiu = false, msg = "Usuário não encontrado" });
             }
-            return View(usuario);
-        }
 
-        // POST: Usuario/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(int id)
-        {
-            Usuario usuario = db.Usuario.Find(id);
             db.Usuario.Remove(usuario);
             db.SaveChanges();
-            return RedirectToAction("Index");
+
+            return Json(new { excluiu = true });
         }
 
         protected override void Dispose(bool disposing)

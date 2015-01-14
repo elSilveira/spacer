@@ -1,0 +1,61 @@
+﻿@model Spacer.Models.Usuario
+
+@{
+    ViewBag.Title = "Meu Perfil";
+    var permissoes = ViewBag.Permissoes as List<Spacer.Models.Permissao>;
+}
+
+<style>
+    ul {
+        list-style: none;
+    }
+</style>
+
+<h2>Meu Perfil</h2>
+
+<div>
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Nome)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Nome)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Login)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Login)
+        </dd>
+    </dl>
+    
+    @if (!User.IsInRole("Admin"))
+    {
+        @Html.ActionLink("Alterar Nome", "Cadastro", "Usuario", new { id = Model.Id }, null) 
+        <br/>
+        @Html.ActionLink("Alterar Senha", "AlterarSenha", "Usuario", new { id = Model.Id, meuPerfil = true }, null)
+
+        <hr />
+        <h4>Permissões</h4>
+
+        <div>
+            <ul>
+                @foreach (var p in permissoes)
+                {
+                    var isChecked =
+                        Model.Permissoes.FirstOrDefault(f => f.Id == p.Id) != null ? "checked" : "";
+                    <li>
+                        <input type="checkbox" value="" @isChecked disabled /> @p.Nome
+                    </li>
+                }
+            </ul>
+        </div>
+
+        <p>
+            @Html.ActionLink("Alterar Permissões", "Permissoes", "Usuario", new { id = Model.Id }, null)
+        </p>
+    }
+</div>

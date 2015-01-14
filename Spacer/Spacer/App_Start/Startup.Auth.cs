@@ -27,7 +27,7 @@ namespace Spacer
                 AuthenticationType = "SpacerApplication",
                 AuthenticationMode = Microsoft.Owin.Security.AuthenticationMode.Active,
                 LoginPath = new PathString("/Acesso/Index"),
-                ExpireTimeSpan = TimeSpan.FromMinutes(5)
+                ExpireTimeSpan = TimeSpan.FromMinutes(30)
             });
 
             app.UseExternalSignInCookie(DefaultAuthenticationTypes.ExternalCookie);

@@ -9,15 +9,19 @@ using Microsoft.Owin.Security;
 using Spacer.Models.UsuariosViewModel;
 using Spacer.Models;
 using System.Security.Principal;
+using Spacer.Methods.ClaimsMethods;
 
 namespace Spacer.Controllers
 {
     public class AcessoController : Controller
     {
+        readonly ContextoDB _db = new ContextoDB();
         private IAuthenticationManager AuthenticationManager
         {
             get { return HttpContext.GetOwinContext().Authentication; }
         }
+
+        readonly ClaimsManager _claimsManager = new ClaimsManager();
 
         [AllowAnonymous]
         public ActionResult Index(string returnUrl)
@@ -36,16 +40,20 @@ namespace Spacer.Controllers
             {
                 try
                 {
-                    //var user = await ValidateLogin(model.Login, model.Senha);
-
-                    //MOCK PARA TESTAR USUARIO
-                    Usuario user = null;
+                    var user = new Usuario();
 
                     if (model.Login.ToUpper() == "ADMIN" && model.Senha.ToUpper() == "123456")
                     {
-                        user = new Usuario {Id = -1, Nome = "Administrador do Sistema", Login = "Admin"};
+                        user.Id = -1;
+                        user.Nome = "Administrador do Sistema";
+                        user.Login = "Administrador";
                     }
-
+                    else
+                    {
+                        user = _db.Usuario.FirstOrDefault(f =>
+                        f.Login == model.Login && f.Senha == model.Senha);
+                    }
+                    
                     if (user == null)
                     {
                         ModelState.AddModelError("Login",
@@ -53,7 +61,13 @@ namespace Spacer.Controllers
                         return View(model);
                     }
 
-                    SignIn(user, model.RememberMe);
+
+                    // caso precise ter o ip, essa é uma das formas que podem ser usadas
+                    //var ip = string.IsNullOrWhiteSpace(Request.ServerVariables["HTTP_X_FORWARDED_FOR"])
+                    //    ? Request.ServerVariables["REMOTE_ADDR"]
+                    //    : Request.ServerVariables["HTTP_X_FORWARDED_FOR"];
+
+                    _claimsManager.SignIn(AuthenticationManager, user, model.RememberMe);
 
                     return RedirectToLocal(returnUrl);
                 }
@@ -69,13 +83,22 @@ namespace Spacer.Controllers
         [Authorize]
         public ActionResult LogOff()
         {
-            AuthenticationManager.SignOut();
+            _claimsManager.LogOff(AuthenticationManager);
             return RedirectToAction("Index", "Home");
         }
 
-        public ActionResult MinhaConta()
+        [Authorize]
+        public ActionResult MeuPerfil()
         {
-            return View();
+            //pega as informações de acordo com o usuário logado
+            var user = _claimsManager.GetClaimsIdentity(User.Identity);
+
+            if (!User.IsInRole("Admin"))
+            {
+                ViewBag.Permissoes = _db.Permissao.Where(w => w.Id > 1).ToList();
+            }
+
+            return View(user);
         }
 
         private ActionResult RedirectToLocal(string returnUrl)
@@ -85,64 +108,6 @@ namespace Spacer.Controllers
                 return Redirect(returnUrl);
             }
             return RedirectToAction("Index", "Home");
-        }
-
-        private void SignIn(Usuario user, bool rememberMe)
-        {
-            try
-            {
-                AuthenticationManager.SignOut("SpacerApplication");
-
-                var ip = string.IsNullOrWhiteSpace(Request.ServerVariables["HTTP_X_FORWARDED_FOR"])
-                    ? Request.ServerVariables["REMOTE_ADDR"]
-                    : Request.ServerVariables["HTTP_X_FORWARDED_FOR"];
-
-                // Criação da instancia do Identity e atribuicao dos claims
-                var claimsIdentity = SetClaimsIdentity(user);
-
-                AuthenticationManager.SignIn(new AuthenticationProperties {IsPersistent = rememberMe}, claimsIdentity);
-            }
-            catch (Exception)
-            {
-                throw;
-            }
-        }
-
-        private ClaimsIdentity SetClaimsIdentity(Usuario user)
-        {
-            var id = new Claim("Id", user.Id.ToString(), "string", "LOCAL AUTHORITY", ClaimsIdentity.DefaultIssuer);
-            var nome = new Claim(ClaimTypes.Name, user.Nome);
-            var login = new Claim("Login", user.Login);
-            var nameidentifier = new Claim(ClaimTypes.NameIdentifier, new Guid().ToString());
-            var identityProvider = new Claim("http://schemas.microsoft.com/accesscontrolservice/2010/07/claims/identityprovider", new Guid().ToString());
-
-            var claims = new List<Claim> { id, nome, login, nameidentifier, identityProvider };
-
-            // adiciona as permissões deste usuário
-            //claims.AddRange(user.Permissoes.ToList().Select(perm => new Claim(ClaimTypes.Role, perm.Chave)));
-
-            //var claimsIdentity = new ClaimsIdentity(claims, "ApplicationCookie");
-            var claimsIdentity = new ClaimsIdentity(claims, "SpacerApplication");
-
-            return claimsIdentity;
-        }
-
-        public Usuario GetClaimsIdentity(IIdentity userPrincipal)
-        {
-            var identity = (ClaimsIdentity)userPrincipal;
-
-            var id = identity.FindFirst("Id");
-            var nome = identity.FindFirst(ClaimTypes.Name);
-            var login = identity.FindFirst("Login");
-
-            var user = new Usuario
-            {
-                Id = Convert.ToInt32(id),
-                Nome = nome.ToString(),
-                Login = login.ToString()
-            };
-
-            return user;
         }
     }
 }

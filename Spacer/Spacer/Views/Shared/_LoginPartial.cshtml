@@ -7,7 +7,7 @@
 
         <ul class="nav navbar-nav navbar-right">
             <li>
-                @Html.ActionLink("Olá " + User.Identity.GetUserName() + "!", "MinhaConta", "Acesso", routeValues: null, htmlAttributes: new { title = "Visualize seus dados e altere sua senha" })
+                @Html.ActionLink("Olá " + User.Identity.GetUserName() + "!", "MeuPerfil", "Acesso", routeValues: null, htmlAttributes: new { title = "Visualize seus dados e altere sua senha" })
             </li>
             <li><a href="javascript:document.getElementById('logoutForm').submit()">Log off</a></li>
         </ul>
