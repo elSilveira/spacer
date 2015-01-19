@@ -8,44 +8,44 @@ using Spacer.Models;
 
 namespace Spacer.Controllers
 {
-    public class TipoEspacoController : Controller
+    public class FormaPagamentoController : Controller
     {
         private ContextoDB db = new ContextoDB();
 
-        [Authorize(Roles = "Admin, VisualizacaoTipoEspaco, CadastroTipoEspaco")]
+        [Authorize(Roles = "Admin, VisualizacaoFormaPagamento, CadastroFormaPagamento")]
         public ActionResult Index()
         {
-            var model = db.TipoEspaco.ToList();
+            var model = db.FormaPagamento.ToList();
 
             return View(model);
         }
 
-        [Authorize(Roles = "Admin, CadastroTipoEspaco")]
+        [Authorize(Roles = "Admin, CadastroFormaPagamento")]
         public ActionResult Cadastro(int? id)
         {
-            var model = new TipoEspaco();
+            var model = new FormaPagamento();
 
             if (id != null && id > 0)
             {
-                model = db.TipoEspaco.Find(id);
+                model = db.FormaPagamento.Find(id);
             }
 
             return View(model);
         }
 
-        [Authorize(Roles = "Admin, CadastroTipoEspaco")]
+        [Authorize(Roles = "Admin, CadastroFormaPagamento")]
         [HttpPost]
-        public ActionResult Cadastro(TipoEspaco tipoEspaco)
+        public ActionResult Cadastro(FormaPagamento formaPagamento)
         {
             if (ModelState.IsValid)
             {
-                if (tipoEspaco.Id > 0)
+                if (formaPagamento.Id > 0)
                 {
-                    db.Entry(tipoEspaco).State = EntityState.Modified;
+                    db.Entry(formaPagamento).State = EntityState.Modified;
                 }
                 else
                 {
-                    db.TipoEspaco.Add(tipoEspaco);
+                    db.FormaPagamento.Add(formaPagamento);
                 }
 
                 db.SaveChanges();
@@ -53,32 +53,32 @@ namespace Spacer.Controllers
                 return RedirectToAction("Index");
             }
 
-            return View(tipoEspaco);
+            return View(formaPagamento);
         }
 
-        [Authorize(Roles = "Admin, CadastroTipoEspaco")]
+        [Authorize(Roles = "Admin, CadastroFormaPagamento")]
         [HttpPost]
         public ActionResult Excluir(int id)
         {
             if (id > 0)
             {
-                var model = db.TipoEspaco.Find(id);
+                var model = db.FormaPagamento.Find(id);
 
                 if (model != null)
                 {
-                    db.TipoEspaco.Remove(model);
+                    db.FormaPagamento.Remove(model);
                     db.SaveChanges();
 
-                    return Json(new {excluiu = true});
+                    return Json(new { excluiu = true });
                 }
                 else
                 {
-                    return Json(new { excluiu = false, msg = "Tipo espaço não encontrado!" });
+                    return Json(new { excluiu = false, msg = "Forma de pagamento não encontrada!" });
                 }
             }
             else
             {
-                return Json(new {excluiu = false, msg = "Tipo espaço não encontrado!"});
+                return Json(new { excluiu = false, msg = "Forma de pagamento não encontrada!" });
             }
         }
     }

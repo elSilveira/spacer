@@ -20,13 +20,28 @@
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    <li>@Html.ActionLink("Home", "Index", "Home", new {area = ""}, null)</li>
+                    <li>@Html.ActionLink("Home", "Index", "Home", new { area = "" }, null)</li>
                     @if (User.Identity.IsAuthenticated)
                     {
-                        if (User.IsInRole("Admin") || User.IsInRole("CadastroUsuarios"))
-                        {
-                            <li>@Html.ActionLink("Usuários", "Index", "Usuario", new { area = "" }, null)</li>
-                        }
+                        <li role="presentation" class="dropdown">
+                            <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-expanded="false">
+                                Cadastros <span class="caret"></span>
+                            </a>
+                            <ul class="dropdown-menu" role="menu">
+                                @if (User.IsInRole("Admin") || User.IsInRole("CadastroUsuarios"))
+                                {
+                                    <li>@Html.ActionLink("Usuários", "Index", "Usuario", new { area = "" }, null)</li>
+                                }
+                                @if (User.IsInRole("Admin") || User.IsInRole("CadastroTipoEspaco"))
+                                {
+                                    <li>@Html.ActionLink("Tipos de Espaço", "Index", "TipoEspaco", new { area = "" }, null)</li>
+                                }
+                                @if (User.IsInRole("Admin") || User.IsInRole("CadastroFormaPagamento"))
+                                {
+                                    <li>@Html.ActionLink("Formas de Pagamento", "Index", "FormaPagamento", new { area = "" }, null)</li>
+                                }
+                            </ul>
+                        </li>
                     }
                     <li>@Html.ActionLink("API", "Index", "Help", new { area = "" }, null)</li>
                 </ul>
