@@ -24,6 +24,7 @@ namespace Spacer.Models
         public DbSet<Permissao> Permissao { get; set; }
         public DbSet<TipoEspaco> TipoEspaco { get; set; }
         public DbSet<FormaPagamento> FormaPagamento { get; set; }
+        public DbSet<PF> PF { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {

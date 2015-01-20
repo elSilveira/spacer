@@ -40,6 +40,11 @@
                                 {
                                     <li>@Html.ActionLink("Formas de Pagamento", "Index", "FormaPagamento", new { area = "" }, null)</li>
                                 }
+                                @if (User.IsInRole("Admin") || User.IsInRole("CadastroPessoas"))
+                                {
+                                    <li>@Html.ActionLink("Pessoa Física", "Index", "PessoaFisica", new { area = "" }, null)</li>
+                                    <li>@Html.ActionLink("Pessoa Jurídica", "Index", "PessoaFisica", new { area = "" }, null)</li>
+                                }
                             </ul>
                         </li>
                     }

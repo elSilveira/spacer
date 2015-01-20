@@ -84,7 +84,7 @@ namespace Spacer.Controllers
         }
 
         [HttpPost]
-        public ActionResult AlterarPermissao(int usuarioid, int permissaoId, bool incluir)
+        public ActionResult AlterarPermissao(int usuarioId, int permissaoId, bool incluir)
         {
             try
             {
@@ -92,12 +92,12 @@ namespace Spacer.Controllers
 
                 if (incluir)
                 {
-                    sql = string.Format("INSERT INTO PermissaoUsuario VALUES ({0}, {1})", usuarioid, permissaoId);
+                    sql = string.Format("INSERT INTO PermissaoUsuario VALUES ({0}, {1})", usuarioId, permissaoId);
                 }
                 else
                 {
                     sql = string.Format("DELETE FROM PermissaoUsuario WHERE UsuarioId = {0} AND PermissaoId = {1}",
-                        usuarioid, permissaoId);
+                        usuarioId, permissaoId);
                 }
 
                 db.Database.ExecuteSqlCommand(sql);
