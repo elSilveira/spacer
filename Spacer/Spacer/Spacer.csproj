@@ -199,12 +199,14 @@
     <Compile Include="Controllers\FormaPagamentoController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\PessoaFisicaController.cs" />
+    <Compile Include="Controllers\PessoaJuridicaController.cs" />
     <Compile Include="Controllers\TipoEspacoController.cs" />
     <Compile Include="Controllers\UsuarioController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Methods\ClaimsMethods\ClaimsManager.cs" />
+    <Compile Include="Methods\Validacoes\Validacoes.cs" />
     <Compile Include="Migrations\201501140202308_First.cs" />
     <Compile Include="Migrations\201501140202308_First.Designer.cs">
       <DependentUpon>201501140202308_First.cs</DependentUpon>
@@ -216,11 +218,13 @@
     <Compile Include="Models\Permissao.cs" />
     <Compile Include="Models\Pessoa.cs" />
     <Compile Include="Models\PF.cs" />
+    <Compile Include="Models\PJ.cs" />
     <Compile Include="Models\TipoEspaco.cs" />
     <Compile Include="Models\Usuario.cs" />
     <Compile Include="Models\UsuariosViewModel\AlteracaoSenhaViewModel.cs" />
     <Compile Include="Models\UsuariosViewModel\UsuarioViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Providers\MyAuthorizationServerProvider.cs" />
     <Compile Include="Results\ChallengeResult.cs" />
     <Compile Include="Startup.cs" />
   </ItemGroup>
@@ -360,7 +364,9 @@
     <Content Include="Views\FormaPagamento\Index.cshtml" />
     <Content Include="Views\FormaPagamento\Cadastro.cshtml" />
     <Content Include="Views\PessoaFisica\Index.cshtml" />
+    <Content Include="Views\PessoaJuridica\Index.cshtml" />
     <Content Include="Views\PessoaFisica\Cadastro.cshtml" />
+    <Content Include="Views\PessoaJuridica\Cadastro.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

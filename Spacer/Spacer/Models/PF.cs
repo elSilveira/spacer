@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
+using System.Web.Mvc;
 
 namespace Spacer.Models
 {
@@ -14,13 +15,14 @@ namespace Spacer.Models
         public string Nome { get; set; }
 
         [Required(ErrorMessage = "* Obrigatório!")]
-        [DataType(DataType.Date)]
+        //[DataType(DataType.Date)]
         [Display(Name = "Dt. Nasc.")]
         public DateTime DataNascimento { get; set; }
 
         [Required(ErrorMessage = "* Obrigatório!")]
         [StringLength(14,
             ErrorMessage = "* Máximo de {1} caracteres!")]
+        [Remote("ValidarCPF", "PessoaFisica", ErrorMessage = "* CPF inválido!")]
         public string CPF { get; set; }
         
         [StringLength(20,

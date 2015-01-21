@@ -1,23 +1,17 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using Microsoft.AspNet.Identity;
-using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.Owin;
+using Microsoft.Owin.Security;
 using Microsoft.Owin.Security.Cookies;
-using Microsoft.Owin.Security.Google;
 using Microsoft.Owin.Security.OAuth;
 using Owin;
-//using Spacer.Providers;
-using Spacer.Models;
+using Spacer.Providers;
 
 namespace Spacer
 {
     public partial class Startup
     {
-        public static OAuthAuthorizationServerOptions OAuthOptions { get; private set; }
-
-        public static string PublicClientId { get; private set; }
+        public static OAuthAuthorizationServerOptions OAuthServerOptions { get; private set; }
 
         // For more information on configuring authentication, please visit http://go.microsoft.com/fwlink/?LinkId=301864
         public void ConfigureAuth(IAppBuilder app)
@@ -25,7 +19,7 @@ namespace Spacer
             app.UseCookieAuthentication(new CookieAuthenticationOptions
             {
                 AuthenticationType = "SpacerApplication",
-                AuthenticationMode = Microsoft.Owin.Security.AuthenticationMode.Active,
+                AuthenticationMode = AuthenticationMode.Active,
                 LoginPath = new PathString("/Acesso/Index"),
                 ExpireTimeSpan = TimeSpan.FromMinutes(30)
             });
@@ -33,18 +27,18 @@ namespace Spacer
             app.UseExternalSignInCookie(DefaultAuthenticationTypes.ExternalCookie);
 
             // Configure the application for OAuth based flow
-            //PublicClientId = "self";
-            //OAuthOptions = new OAuthAuthorizationServerOptions
-            //{
-            //    TokenEndpointPath = new PathString("/Token"),
-            //    Provider = new ApplicationOAuthProvider(PublicClientId),
-            //    AuthorizeEndpointPath = new PathString("/api/Account/ExternalLogin"),
-            //    AccessTokenExpireTimeSpan = TimeSpan.FromDays(14),
-            //    AllowInsecureHttp = true
-            //};
+            OAuthServerOptions = new OAuthAuthorizationServerOptions
+            {
+                TokenEndpointPath = new PathString("/Api/Token"),
+                Provider = new MyAuthorizationServerProvider(),
+                //AuthorizeEndpointPath = new PathString("/api/Account/ExternalLogin"),
+                AccessTokenExpireTimeSpan = TimeSpan.FromDays(14),
+                AllowInsecureHttp = true
+            };
 
-            //// Enable the application to use bearer tokens to authenticate users
-            //app.UseOAuthBearerTokens(OAuthOptions);
+            // Enable the application to use bearer tokens to authenticate users
+            app.UseOAuthAuthorizationServer(OAuthServerOptions);
+            app.UseOAuthBearerTokens(OAuthServerOptions);
 
             // Uncomment the following lines to enable logging in with third party login providers
             //app.UseMicrosoftAccountAuthentication(

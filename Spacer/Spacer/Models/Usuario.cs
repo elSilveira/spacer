@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
+using System.Web.Mvc;
 
 namespace Spacer.Models
 {
@@ -19,6 +20,7 @@ namespace Spacer.Models
         [StringLength(20, 
             ErrorMessage = "* O campo {0} aceita no máximo {1} e no mínimo {2} caracteres!", 
             MinimumLength = 5)]
+        [Remote("ValidarUsuarioUnico", "Usuario", ErrorMessage = "* Usuário já existente!")]
         public string Login { get; set; }
 
         [Required(ErrorMessage = "* Obrigatório!")]
@@ -33,7 +35,7 @@ namespace Spacer.Models
             MinimumLength = 5)]
         [DataType(DataType.Password)]
         [Display(Name = "Confirmação de Senha")]
-        [Compare("Senha", ErrorMessage = "* A senha e a confirmação da senha não são iguais!")]
+        [System.ComponentModel.DataAnnotations.Compare("Senha", ErrorMessage = "* A senha e a confirmação da senha não são iguais!")]
         public string ConfirmacaoSenha { get; set; }
 
         public virtual ICollection<Permissao> Permissoes { get; set; }

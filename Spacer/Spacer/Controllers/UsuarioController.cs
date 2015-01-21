@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Data.Entity;
 using System.Linq;
 using System.Web.Mvc;
 using Spacer.Methods.ClaimsMethods;
@@ -186,6 +185,23 @@ namespace Spacer.Controllers
             db.SaveChanges();
 
             return Json(new { excluiu = true });
+        }
+
+        public ActionResult ValidarUsuarioUnico(string login)
+        {
+            var valido = true;
+
+            if (!string.IsNullOrWhiteSpace(login.Trim()))
+            {
+                var usuario = db.Usuario.FirstOrDefault(f => f.Login == login);
+
+                if (usuario != null)
+                {
+                    valido = false;
+                }
+            }
+
+            return Json(valido, JsonRequestBehavior.AllowGet);
         }
 
         protected override void Dispose(bool disposing)
