@@ -10,7 +10,7 @@
 @using (Html.BeginForm())
 {
     @Html.AntiForgeryToken()
-    
+
     <div class="form-horizontal">
         <h4>PF</h4>
         <hr />
@@ -130,14 +130,19 @@
 }
 
 <div>
-    @Html.ActionLink("Voltar para lista", "Index")
+    @Html.ActionLink("Voltar para lista", "Index") |
+    @if (Model.Id > 0)
+    {
+        <button id="agendamento" class="btn btn-primary">Agendamentos</button>
+        <button id="novo" class="btn btn-success">Novo Agendamento</button>
+    }
 </div>
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
 
     <script>
-        $(function() {
+        $(function () {
             $('#DataNascimento').val('@DateTime.Now.ToShortDateString()').datepicker({
                 language: "pt-BR",
                 calendarWeeks: true,
@@ -146,6 +151,14 @@
             $('#CPF').mask('999.999.999-99');
             $('#FonePrincipal, #FoneSecundario').mask('(99) 99999-9999');
             $('#CEP').mask('99999-999');
+
+            $('#agendamento').click(function () {
+                location.href = '@Url.Action("Index", "Agendamento", new{id = Model.Id, tipoCliente = 1})';
+            });
+
+            $('#novo').click(function () {
+                location.href = '@Url.Action("Cadastro", "Agendamento")/?clientId=@Model.Id&tipoCliente=1';
+            });
         });
     </script>
 }

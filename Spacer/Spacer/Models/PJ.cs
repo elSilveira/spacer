@@ -37,5 +37,7 @@ namespace Spacer.Models
             ErrorMessage = "* Máximo de {1} caracteres!")]
         [Display(Name = "Inscrição Estadual")]
         public string InscricaoEstadual { get; set; }
+
+        public virtual ICollection<Agendamento> Agendamento { get; set; }
     }
 }

@@ -13,7 +13,7 @@ namespace Spacer.Migrations
         
         string IMigrationMetadata.Id
         {
-            get { return "201501140202308_First"; }
+            get { return "201501212302063_First"; }
         }
         
         string IMigrationMetadata.Source

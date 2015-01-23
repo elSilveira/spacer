@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using System.Security.AccessControl;
 using System.Web;
 using System.Web.Mvc;
 
@@ -32,5 +33,7 @@ namespace Spacer.Models
         [Required(ErrorMessage = "* Obrigatório!")]
         [Display(Name = "Gênero")]
         public Genero Genero { get; set; }
+
+        public virtual  ICollection<Agendamento> Agendamento { get; set; }
     }
 }

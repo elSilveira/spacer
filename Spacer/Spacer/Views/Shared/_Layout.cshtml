@@ -36,6 +36,10 @@
                                 {
                                     <li>@Html.ActionLink("Tipos de Espaço", "Index", "TipoEspaco", new { area = "" }, null)</li>
                                 }
+                                @if (User.IsInRole("Admin") || User.IsInRole("CadastroEspaco"))
+                                {
+                                    <li>@Html.ActionLink("Espaços", "Index", "Espaco", new { area = "" }, null)</li>
+                                }
                                 @if (User.IsInRole("Admin") || User.IsInRole("CadastroFormaPagamento"))
                                 {
                                     <li>@Html.ActionLink("Formas de Pagamento", "Index", "FormaPagamento", new { area = "" }, null)</li>
