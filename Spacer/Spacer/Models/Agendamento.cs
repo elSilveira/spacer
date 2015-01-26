@@ -1,8 +1,7 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Web;
 
 namespace Spacer.Models
 {
@@ -36,10 +35,10 @@ namespace Spacer.Models
         public int FormaPagamentoId { get; set; }
 
         [Display(Name = "Cliente")]
-        public int PFId { get; set; }
+        public int? PFId { get; set; }
 
         [Display(Name = "Cliente")]
-        public int PJId { get; set; }
+        public int? PJId { get; set; }
 
         public virtual Espaco Espaco { get; set; }
 

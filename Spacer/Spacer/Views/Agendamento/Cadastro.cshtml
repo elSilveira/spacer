@@ -2,18 +2,21 @@
 
 @{
     ViewBag.Title = "Cadastro";
+    var possuiAvaliacoes = (bool) ViewBag.PossuiAvaliacao;
 }
 
-<h2>Cadastro</h2>
-
+<h2>Cadastro de Agendamentos</h2>
+@if (possuiAvaliacoes)
+{
+    <a href="#" id="aval">Visualizar Avaliação</a>
+}
+<hr />
 
 @using (Html.BeginForm())
 {
     @Html.AntiForgeryToken()
-    
+
     <div class="form-horizontal">
-        <h4>Agendamento</h4>
-        <hr />
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
         @Html.HiddenFor(model => model.Id)
 
@@ -50,36 +53,43 @@
         </div>
 
         <div class="form-group">
-            @Html.LabelFor(model => model.EspacoId, "EspacoId", htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.LabelFor(model => model.EspacoId, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.DropDownList("EspacoId", null, htmlAttributes: new { @class = "form-control" })
+                @Html.DropDownListFor(model => model.EspacoId, null, "Selecione um Espaço", new { @class = "form-control" })
                 @Html.ValidationMessageFor(model => model.EspacoId, "", new { @class = "text-danger" })
             </div>
         </div>
 
         <div class="form-group">
-            @Html.LabelFor(model => model.FormaPagamentoId, "FormaPagamentoId", htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.LabelFor(model => model.FormaPagamentoId, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.DropDownList("FormaPagamentoId", null, htmlAttributes: new { @class = "form-control" })
+                @Html.DropDownListFor(model => model.FormaPagamentoId, null, new { @class = "form-control" })
                 @Html.ValidationMessageFor(model => model.FormaPagamentoId, "", new { @class = "text-danger" })
             </div>
         </div>
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.PFId, "PFId", htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.HiddenFor(model => model.PFId)
-                @Html.TextBox("NomeClientePF", Model.PF.Nome, new { @class = "form-control", disabled = "disabled" })
+        @if (Model.PF != null)
+        {
+            <div class="form-group">
+                @Html.LabelFor(model => model.PFId, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.HiddenFor(model => model.PJId)
+                    @Html.HiddenFor(model => model.PFId)
+                    @Html.TextBox("NomeClientePF", Model.PF.Nome, new { @class = "form-control", disabled = "disabled" })
+                </div>
             </div>
-        </div>
-
-        @*<div class="form-group">
-            @Html.LabelFor(model => model.PJId, "PJId", htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.DropDownList("PJId", null, htmlAttributes: new { @class = "form-control" })
-                @Html.ValidationMessageFor(model => model.PJId, "", new { @class = "text-danger" })
+        }
+        else
+        {
+            <div class="form-group">
+                @Html.LabelFor(model => model.PJId, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.HiddenFor(model => model.PJId)
+                    @Html.HiddenFor(model => model.PFId)
+                    @Html.TextBox("NomeClientePJ", Model.PJ.NomeFantasia, new { @class = "form-control", disabled = "disabled" })
+                </div>
             </div>
-        </div>*@
+        }
 
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
@@ -90,9 +100,37 @@
 }
 
 <div>
-    @Html.ActionLink("Back to List", "Index")
+    @Html.ActionLink("Voltar para lista", "Index", new { id = (int?)ViewBag.ClientId, tipoCliente = (int?)ViewBag.TipoCliente })
 </div>
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
+    <script>
+        $(function () {
+            if ($('#DataAgendamento').val() === '' || $('#DataAgendamento').val() === '01/01/0001 00:00:00') {
+                $('#DataAgendamento').val('@DateTime.Now.ToShortDateString()');
+            }
+
+            $('#DataAgendamento').datepicker({ language: "pt-BR", format: "dd/mm/yyyy" }).mask('99/99/9999');
+
+            $('input[type=text]').focus(function () {
+                $(this).select();
+            });
+
+            $('#EspacoId').change(function () {
+                var id = $(this).val();
+
+                if (id === '') {
+                    $('#ValorAgendamento, #ValorPago').val('0,00');
+                } else {
+                    //aria-describedby="inputWarning2Status"
+                    $('#ValorAgendamento').attr('disabled', true);
+                    $.getJSON('@Url.Action("CarregarValorEspaco", "Espaco")/' + id, function (valor) {
+                        $('#ValorAgendamento').removeAttr('disabled').val(valor);
+                        $('#ValorPago').val('0,00');
+                    });
+                }
+            });
+        });
+    </script>
 }

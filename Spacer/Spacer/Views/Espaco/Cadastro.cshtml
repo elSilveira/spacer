@@ -7,7 +7,7 @@
 <h2>Cadastro</h2>
 
 
-@using (Html.BeginForm())
+@using (Html.BeginForm("Cadastro", "Espaco", FormMethod.Post, new { enctype = "multipart/form-data" }))
 {
     @Html.AntiForgeryToken()
 
@@ -42,26 +42,23 @@
         </div>
 
         <div class="form-group">
-            @Html.LabelFor(model => model.Foto01, htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.Label("Foto 1", new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.EditorFor(model => model.Foto01, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.Foto01, "", new { @class = "text-danger" })
+                <input type="file" value="" id="foto1" name="fotos" class="form-control" />
             </div>
         </div>
 
         <div class="form-group">
-            @Html.LabelFor(model => model.Foto02, htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.Label("Foto 2", new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.EditorFor(model => model.Foto02, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.Foto02, "", new { @class = "text-danger" })
+                <input type="file" value="" id="foto2" name="fotos" class="form-control" />
             </div>
         </div>
 
         <div class="form-group">
-            @Html.LabelFor(model => model.Foto03, htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.Label("Foto 3", new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.EditorFor(model => model.Foto03, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.Foto03, "", new { @class = "text-danger" })
+                <input type="file" value="" id="foto3" name="fotos" class="form-control" />
             </div>
         </div>
 
@@ -76,19 +73,19 @@
         @if (!string.IsNullOrWhiteSpace((string)ViewBag.Foto1))
         {
             <div class="form-group">
-                <img src="@Url.Content("~/Images/")@ViewBag.Foto1" class="img-responsive" alt="Responsive image">
+                <img src="@Url.Content("~/FotosEspacos/")@ViewBag.Foto1" class="img-responsive" alt="Responsive image">
             </div>
         }
         @if (!string.IsNullOrWhiteSpace((string)ViewBag.Foto2))
         {
             <div class="form-group">
-                <img src="@Url.Content("~/Images/")@ViewBag.Foto2" class="img-responsive" alt="Responsive image">
+                <img src="@Url.Content("~/FotosEspacos/")@ViewBag.Foto2" class="img-responsive" alt="Responsive image">
             </div>
         }
         @if (!string.IsNullOrWhiteSpace((string)ViewBag.Foto3))
         {
             <div class="form-group">
-                <img src="@Url.Content("~/Images/")@ViewBag.Foto3" class="img-responsive" alt="Responsive image">
+                <img src="@Url.Content("~/FotosEspacos/")@ViewBag.Foto3" class="img-responsive" alt="Responsive image">
             </div>
         }
 

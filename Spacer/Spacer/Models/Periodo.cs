@@ -7,9 +7,10 @@ namespace Spacer.Models
 {
     public enum Periodo
     {
-        Manhã = 1,
-        Tarde = 2,
-        Noite = 3,
-        Madrugada = 4
+        Manhã = 0,
+        Tarde = 1,
+        Noite = 2,
+        Madrugada = 3,
+        Diária = 4
     }
 }

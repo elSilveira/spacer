@@ -15,6 +15,9 @@ namespace Spacer
                         "~/Scripts/jquery.validate*",
                         "~/Scripts/bootstrap-datepicker.js",
                         "~/Scripts/locales/bootstrap-datepicker.pt-BR.js",
+                        "~/Scripts/globalize/globalize.js",
+                        "~/Scripts/globalize/cultures/globalize.culture.pt-BR.js",
+                        "~/Scripts/globalize/decimal.number.validator.js",
                         "~/Scripts/jquery.maskedinput.js"));
 
             // Use the development version of Modernizr to develop with and learn from. Then, when you're

@@ -28,6 +28,7 @@ namespace Spacer.Models
         public DbSet<PJ> PJ { get; set; }
         public DbSet<Espaco> Espaco { get; set; }
         public DbSet<Agendamento> Agendamento { get; set; }
+        public DbSet<AvaliacaoEspaco> AvaliacaoEspaco { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {

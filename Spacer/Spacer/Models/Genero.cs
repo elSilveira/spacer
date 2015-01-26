@@ -7,8 +7,8 @@ namespace Spacer.Models
 {
     public enum Genero
     {
-        Masculino = '1',
-        Feminino = '2',
-        Indefinido = '3'
+        Masculino = 0,
+        Feminino = 1,
+        Indefinido = 2
     }
 }

@@ -81,5 +81,14 @@ namespace Spacer.Controllers
                 return Json(new { excluiu = false, msg = "Forma de pagamento não encontrada!" });
             }
         }
+
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                db.Dispose();
+            }
+            base.Dispose(disposing);
+        }
     }
 }

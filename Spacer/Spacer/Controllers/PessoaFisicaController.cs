@@ -1,5 +1,6 @@
 ﻿using System.Data.Entity;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Web.Mvc;
 using Spacer.Methods.Validacoes;
 using Spacer.Models;
@@ -37,7 +38,11 @@ namespace Spacer.Controllers
             {
                 if (pf.Id > 0)
                 {
-                    _db.Entry(pf).State = EntityState.Modified;
+                    var pfOnDb = _db.PF.Find(pf.Id);
+
+                    TryUpdateModel(pfOnDb);
+
+                    _db.Entry(pfOnDb).State = EntityState.Modified;
                 }
                 else
                 {
@@ -113,6 +118,15 @@ namespace Spacer.Controllers
             }
 
             return Json(valido, JsonRequestBehavior.AllowGet);
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                _db.Dispose();
+            }
+            base.Dispose(disposing);
         }
     }
 }
