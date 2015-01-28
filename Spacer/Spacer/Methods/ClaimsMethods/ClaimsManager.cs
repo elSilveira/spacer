@@ -61,10 +61,11 @@ namespace Spacer.Methods.ClaimsMethods
             var id = new Claim("Id", user.Id.ToString(), "string", "LOCAL AUTHORITY", ClaimsIdentity.DefaultIssuer);
             var nome = new Claim(ClaimTypes.Name, user.Nome);
             var login = new Claim("Login", user.Login);
+            var tipoCliente = new Claim("TipoCliente", user.TipoCliente.ToString());
             var nameidentifier = new Claim(ClaimTypes.NameIdentifier, new Guid().ToString());
             var identityProvider = new Claim("http://schemas.microsoft.com/accesscontrolservice/2010/07/claims/identityprovider", new Guid().ToString());
 
-            var claims = new List<Claim> { id, nome, login, nameidentifier, identityProvider };
+            var claims = new List<Claim> { id, nome, login, tipoCliente, nameidentifier, identityProvider };
 
             // adiciona as permissões deste usuário
             // se for diferente de -1, é um usuário comum, sendo
@@ -99,7 +100,7 @@ namespace Spacer.Methods.ClaimsMethods
             var id = identity.FindFirst("Id").Value;
             var nome = identity.FindFirst(ClaimTypes.Name).Value;
             var login = identity.FindFirst("Login").Value;
-
+            var tipoCliente = identity.FindFirst("TipoCliente").Value;
             var roles = identity.FindAll(f => f.Type == ClaimTypes.Role).ToList();
 
             var db = new ContextoDB();
@@ -111,7 +112,8 @@ namespace Spacer.Methods.ClaimsMethods
                 Id = Convert.ToInt32(id),
                 Nome = nome.ToString(),
                 Login = login.ToString(),
-                Permissoes = permissoes
+                Permissoes = permissoes,
+                TipoCliente = Convert.ToInt32(tipoCliente)
             };
 
             return user;

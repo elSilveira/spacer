@@ -38,6 +38,8 @@ namespace Spacer.Models
         [System.ComponentModel.DataAnnotations.Compare("Senha", ErrorMessage = "* A senha e a confirmação da senha não são iguais!")]
         public string ConfirmacaoSenha { get; set; }
 
+        public int TipoCliente { get; set; }
+
         public virtual ICollection<Permissao> Permissoes { get; set; }
     }
 }

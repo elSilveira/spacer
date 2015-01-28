@@ -48,6 +48,7 @@ namespace Spacer.Models
             // ignora a propriedade ConfirmacaoSenha do modelo de usuário e faz
             // com que este campo não seja gerado no banco de dados
             modelBuilder.Entity<Usuario>().Ignore(i => i.ConfirmacaoSenha);
+            modelBuilder.Entity<Usuario>().Ignore(i => i.TipoCliente);
 
             base.OnModelCreating(modelBuilder);
         }

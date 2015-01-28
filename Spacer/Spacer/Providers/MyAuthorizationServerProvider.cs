@@ -29,7 +29,7 @@ namespace Spacer.Providers
                 var password = context.Password;
 
                 var usuario = new Usuario();
-
+                
                 var usuariopf = await db.PF.FirstOrDefaultAsync(f => f.Login == userName && f.Senha == password);
 
                 if (usuariopf != null)
@@ -37,6 +37,7 @@ namespace Spacer.Providers
                     usuario.Id = usuariopf.Id;
                     usuario.Nome = usuariopf.Nome;
                     usuario.Login = usuariopf.Login;
+                    usuario.TipoCliente = 1;
                 }
                 else
                 {
@@ -47,6 +48,7 @@ namespace Spacer.Providers
                         usuario.Id = usuariopj.Id;
                         usuario.Nome = usuariopj.NomeFantasia;
                         usuario.Login = usuariopj.Login;
+                        usuario.TipoCliente = 2;
                     }
                 }
 
@@ -55,7 +57,7 @@ namespace Spacer.Providers
                     var permissoes = new List<Permissao>
                     {
                         new Permissao {Nome = "Visualização de Tipos de Espaços", Chave = "VisualizacaoTipoEspaco"},
-                        new Permissao { Nome = "Visualização de Formas de Pagamentos", Chave = "VisualizacaoFormasPagamentos"},
+                        new Permissao {Nome = "Visualização de Formas de Pagamentos", Chave = "VisualizacaoFormasPagamentos"},
                         new Permissao {Nome = "Cadastro de Avaliações", Chave = "VisualizacaoAvaliacoes"},
                         new Permissao {Nome = "Cadastro de Agendamentos", Chave = "CadastroAgendamentos"}
                     };

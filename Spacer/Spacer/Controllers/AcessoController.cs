@@ -61,6 +61,7 @@ namespace Spacer.Controllers
                         return View(model);
                     }
 
+                    user.TipoCliente = 0;
 
                     // caso precise ter o ip, essa é uma das formas que podem ser usadas
                     //var ip = string.IsNullOrWhiteSpace(Request.ServerVariables["HTTP_X_FORWARDED_FOR"])
