@@ -216,7 +216,9 @@
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Agendamento.cs" />
-    <Compile Include="Models\AgendamentoViewModel\AgendamentoConsultaViewModel.cs" />
+    <Compile Include="Models\AgendamentoViewModel\AgendamentoConsultaViewModel.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Models\AgendamentoViewModel\AgendamentoInclusaoViewModel.cs" />
     <Compile Include="Models\AgendamentoViewModel\AgendamentoCombosViewModel.cs" />
     <Compile Include="Models\AvaliacaoEspaco.cs" />
